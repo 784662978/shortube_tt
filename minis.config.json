@@ -1,0 +1,10 @@
+{
+  "dev": {
+    "port": 9000,
+    "host": "localhost"
+  },
+  "build": {
+    "outputDir": "dist",
+    "htmlEntry": "index.html"
+  }
+}
