@@ -49,3 +49,22 @@ export interface CategoriesApiResponse {
   msg: string
   response: MovieCategory[]
 }
+
+/** 单集剧集信息 */
+export interface MovieEpisode {
+  episodes: string
+  size: string
+  fps: string
+  duration: string
+  height: string
+  width: string
+  playurl: string
+}
+
+/** 剧集列表 API 响应体 */
+export interface MovieEpisodesResponse {
+  status: string
+  success: boolean
+  msg: string
+  response: MovieEpisode[]
+}

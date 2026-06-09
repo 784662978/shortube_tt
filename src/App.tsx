@@ -14,6 +14,9 @@ const HistoryPage = lazy(() =>
 const ProfilePage = lazy(() =>
   import('@/features/profile/ProfilePage').then((m) => ({ default: m.ProfilePage }))
 )
+const DramaDetailPage = lazy(() =>
+  import('@/features/drama/DramaDetailPage').then((m) => ({ default: m.DramaDetailPage }))
+)
 
 export default function App() {
   return (
@@ -30,6 +33,7 @@ export default function App() {
           <Route path="/for-you" element={<ForYouPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/drama/:id" element={<DramaDetailPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

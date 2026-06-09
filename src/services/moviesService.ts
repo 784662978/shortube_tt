@@ -1,5 +1,5 @@
 import moviesApiClient from './moviesApiClient'
-import type { MoviesApiResponse, CategoriesApiResponse } from '@/types/movies'
+import type { MoviesApiResponse, CategoriesApiResponse, MovieEpisodesResponse } from '@/types/movies'
 
 export const moviesService = {
   /** 获取短剧列表（分页） */
@@ -13,4 +13,8 @@ export const moviesService = {
   /** 按分类获取短剧列表（分页） */
   getByCategories: (params: { categorieId: string; page: number; pageSize: number }) =>
     moviesApiClient.get<any, MoviesApiResponse>('/api/Movies/GetByCategories', { params }),
+
+  /** 获取短剧剧集列表 */
+  getMovieEpisodes: (params: { id: string }) =>
+    moviesApiClient.get<any, MovieEpisodesResponse>('/api/MovieEpisodes/GetByMovieId', { params }),
 }
