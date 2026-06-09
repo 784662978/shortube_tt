@@ -5,6 +5,15 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 const HomePage = lazy(() =>
   import('@/features/home/HomePage').then((m) => ({ default: m.HomePage }))
 )
+const ForYouPage = lazy(() =>
+  import('@/features/for-you/ForYouPage').then((m) => ({ default: m.ForYouPage }))
+)
+const HistoryPage = lazy(() =>
+  import('@/features/history/HistoryPage').then((m) => ({ default: m.HistoryPage }))
+)
+const ProfilePage = lazy(() =>
+  import('@/features/profile/ProfilePage').then((m) => ({ default: m.ProfilePage }))
+)
 
 export default function App() {
   return (
@@ -18,6 +27,9 @@ export default function App() {
       >
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/for-you" element={<ForYouPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
