@@ -4,13 +4,26 @@ import { DramaCard } from '@/components/ui/DramaCard'
 import { DramaCardSkeleton } from '@/components/ui/Skeleton'
 import { ErrorFallback } from '@/components/ui/ErrorFallback'
 import { EmptyState } from '@/components/ui/EmptyState'
+import type { Drama } from '@/types/drama'
 
-export function NewArrivals() {
-  const { data, isLoading, isError, refetch } = useQuery({
+interface NewArrivalsProps {
+  dramas?: Drama[]
+  isLoading?: boolean
+  isError?: boolean
+  onRetry?: () => void
+}
+
+export function NewArrivals({ dramas: externalDramas, isLoading: externalLoading, isError: externalError, onRetry }: NewArrivalsProps) {
+  const { data: queriedData, isLoading: queriedLoading, isError: queriedError, refetch } = useQuery({
     queryKey: ['new-arrivals'],
     queryFn: () => dramaService.getNewArrivals().then((r) => r.data),
     staleTime: 5 * 60 * 1000,
+    enabled: externalDramas === undefined,
   })
+
+  const data = externalDramas ?? queriedData
+  const isLoading = externalLoading ?? queriedLoading
+  const isError = externalError ?? queriedError
 
   return (
     <section>
@@ -31,7 +44,7 @@ export function NewArrivals() {
         </div>
       )}
 
-      {isError && <ErrorFallback onRetry={() => refetch()} />}
+      {isError && <ErrorFallback onRetry={() => (onRetry ? onRetry() : refetch())} />}
 
       {data && data.length === 0 && (
         <EmptyState title="No new dramas yet" description="Check back later for fresh content" />

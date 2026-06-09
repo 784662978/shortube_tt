@@ -1,5 +1,5 @@
 import type { Drama } from '@/types/drama'
-import { Play, Star } from 'lucide-react'
+import { Play } from 'lucide-react'
 import { formatNumber } from '@/utils/format'
 
 interface DramaCardProps {
@@ -30,10 +30,6 @@ export function DramaCard({ drama, variant = 'vertical', rank, className = '', o
               {rank}
             </span>
           )}
-          <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/60 backdrop-blur-sm rounded-full px-2 py-0.5">
-            <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-            <span className="text-xs text-white">{drama.rating}</span>
-          </div>
         </div>
         <h4 className="text-sm font-medium text-brand-text truncate">{drama.title}</h4>
         <p className="text-xs text-brand-muted mt-0.5">{formatNumber(drama.views)} views</p>
@@ -95,12 +91,6 @@ export function DramaCard({ drama, variant = 'vertical', rank, className = '', o
             NEW
           </span>
         )}
-
-        {/* Rating */}
-        <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-black/60 backdrop-blur-sm rounded-full px-2 py-0.5">
-          <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-          <span className="text-xs text-white">{drama.rating}</span>
-        </div>
 
         {/* Play button on hover */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">

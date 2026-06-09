@@ -13,5 +13,12 @@ export default defineConfig({
   server: {
     port: 9000,
     open: true,
+    proxy: {
+      '/movies-api': {
+        target: 'https://api.aipopshort.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/movies-api/, ''),
+      },
+    },
   },
 })

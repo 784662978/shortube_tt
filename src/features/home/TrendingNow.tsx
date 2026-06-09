@@ -3,13 +3,26 @@ import { dramaService } from '@/services/dramaService'
 import { DramaCard } from '@/components/ui/DramaCard'
 import { TrendingCardSkeleton } from '@/components/ui/Skeleton'
 import { ErrorFallback } from '@/components/ui/ErrorFallback'
+import type { Drama } from '@/types/drama'
 
-export function TrendingNow() {
-  const { data, isLoading, isError, refetch } = useQuery({
+interface TrendingNowProps {
+  dramas?: Drama[]
+  isLoading?: boolean
+  isError?: boolean
+  onRetry?: () => void
+}
+
+export function TrendingNow({ dramas: externalDramas, isLoading: externalLoading, isError: externalError, onRetry }: TrendingNowProps) {
+  const { data: queriedData, isLoading: queriedLoading, isError: queriedError, refetch } = useQuery({
     queryKey: ['trending-dramas'],
     queryFn: () => dramaService.getTrending().then((r) => r.data),
     staleTime: 5 * 60 * 1000,
+    enabled: externalDramas === undefined,
   })
+
+  const data = externalDramas ?? queriedData
+  const isLoading = externalLoading ?? queriedLoading
+  const isError = externalError ?? queriedError
 
   return (
     <section>
@@ -30,7 +43,7 @@ export function TrendingNow() {
         </div>
       )}
 
-      {isError && <ErrorFallback onRetry={() => refetch()} />}
+      {isError && <ErrorFallback onRetry={() => (onRetry ? onRetry() : refetch())} />}
 
       {data && (
         <div className="flex gap-3 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-1">
