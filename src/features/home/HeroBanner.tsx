@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Play, Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { dramaService } from '@/services/dramaService'
@@ -18,6 +19,7 @@ interface HeroBannerProps {
 const AUTO_PLAY_INTERVAL = 4000
 
 export function HeroBanner({ dramas: externalDramas, isLoading: externalLoading, isError: externalError, onRetry }: HeroBannerProps) {
+  const navigate = useNavigate()
   const scrollRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
   const hoverRef = useRef(false)
@@ -173,6 +175,7 @@ export function HeroBanner({ dramas: externalDramas, isLoading: externalLoading,
             key={drama.id}
             ref={(el) => { cardRefs.current[idx] = el }}
             className="flex-shrink-0 w-[280px] sm:w-[320px] snap-center cursor-pointer group/card"
+            onClick={() => navigate(`/drama/${drama.id}`)}
           >
             <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
               <img

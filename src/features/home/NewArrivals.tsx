@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { dramaService } from '@/services/dramaService'
 import { DramaCard } from '@/components/ui/DramaCard'
 import { DramaCardSkeleton } from '@/components/ui/Skeleton'
@@ -14,6 +15,7 @@ interface NewArrivalsProps {
 }
 
 export function NewArrivals({ dramas: externalDramas, isLoading: externalLoading, isError: externalError, onRetry }: NewArrivalsProps) {
+  const navigate = useNavigate()
   const { data: queriedData, isLoading: queriedLoading, isError: queriedError, refetch } = useQuery({
     queryKey: ['new-arrivals'],
     queryFn: () => dramaService.getNewArrivals().then((r) => r.data),
@@ -53,7 +55,7 @@ export function NewArrivals({ dramas: externalDramas, isLoading: externalLoading
       {data && data.length > 0 && (
         <div className="grid grid-cols-2 gap-3">
           {data.slice(0, 4).map((drama) => (
-            <DramaCard key={drama.id} drama={drama} />
+            <DramaCard key={drama.id} drama={drama} onClick={() => navigate(`/drama/${drama.id}`)} />
           ))}
         </div>
       )}

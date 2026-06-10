@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
 import { moviesService } from '@/services/moviesService'
 import { mapMovieToDrama } from '@/utils/moviesMapper'
@@ -24,6 +25,7 @@ interface AllDramasProps {
 }
 
 export function AllDramas({ allDramas: externalDramas, isLoading: externalLoading, isError: externalError, onRetry }: AllDramasProps) {
+  const navigate = useNavigate()
   const [activeCategoryId, setActiveCategoryId] = useState(ALL_TAB)
   const [clientPage, setClientPage] = useState(1)
 
@@ -171,7 +173,7 @@ export function AllDramas({ allDramas: externalDramas, isLoading: externalLoadin
         <>
           <div className="grid grid-cols-2 gap-3">
             {dramas.map((drama) => (
-              <DramaCard key={drama.id} drama={drama} />
+              <DramaCard key={drama.id} drama={drama} onClick={() => navigate(`/drama/${drama.id}`)} />
             ))}
           </div>
 

@@ -1,8 +1,13 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { moviesService } from '@/services/moviesService'
+import { addHistory } from '@/services/historyService'
 import { Flame, ChevronRight, Play } from 'lucide-react'
 import type { Drama } from '@/types/drama'
+
+/** 观看记录阈值：播放 ≥ 10s 或 ≥ 30% 进度即记录 */
+const WATCH_TIME_THRESHOLD = 10
+const WATCH_PROGRESS_THRESHOLD = 0.3
 
 interface ForYouVideoSlideProps {
   drama: Drama
@@ -17,6 +22,7 @@ export function ForYouVideoSlide({ drama, isActive, onViewDetail }: ForYouVideoS
   const [progress, setProgress] = useState(0)
   const [duration, setDuration] = useState(0)
   const isSeeking = useRef(false)
+  const hasRecorded = useRef(false)
 
   const { data: episodes } = useQuery({
     queryKey: ['movie-episodes', drama.id],
@@ -37,6 +43,7 @@ export function ForYouVideoSlide({ drama, isActive, onViewDetail }: ForYouVideoS
     if (!video || !playUrl) return
 
     if (isActive) {
+      hasRecorded.current = false
       video.play().catch(() => {
         video.muted = true
         video.play().catch(() => {})
@@ -55,8 +62,24 @@ export function ForYouVideoSlide({ drama, isActive, onViewDetail }: ForYouVideoS
     if (!video || !playUrl) return
 
     const onTimeUpdate = () => {
-      if (!isSeeking.current) {
-        setProgress(video.duration ? video.currentTime / video.duration : 0)
+      if (!isSeeking.current && video.duration) {
+        const cur = video.currentTime
+        setProgress(cur / video.duration)
+
+        // 达到阈值时写入历史记录（仅一次）
+        if (
+          !hasRecorded.current &&
+          (cur >= WATCH_TIME_THRESHOLD || cur / video.duration >= WATCH_PROGRESS_THRESHOLD)
+        ) {
+          hasRecorded.current = true
+          addHistory({
+            title: drama.title,
+            url: `/drama/${drama.id}`,
+            coverImage: drama.poster,
+            dramaId: String(drama.id),
+            episode: 1,
+          })
+        }
       }
     }
     const onDurationChange = () => setDuration(video.duration)

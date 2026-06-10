@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { dramaService } from '@/services/dramaService'
 import { DramaCard } from '@/components/ui/DramaCard'
 import { TrendingCardSkeleton } from '@/components/ui/Skeleton'
@@ -13,6 +14,7 @@ interface TrendingNowProps {
 }
 
 export function TrendingNow({ dramas: externalDramas, isLoading: externalLoading, isError: externalError, onRetry }: TrendingNowProps) {
+  const navigate = useNavigate()
   const { data: queriedData, isLoading: queriedLoading, isError: queriedError, refetch } = useQuery({
     queryKey: ['trending-dramas'],
     queryFn: () => dramaService.getTrending().then((r) => r.data),
@@ -53,6 +55,7 @@ export function TrendingNow({ dramas: externalDramas, isLoading: externalLoading
               drama={drama}
               variant="trending"
               rank={drama.trendingRank || idx + 1}
+              onClick={() => navigate(`/drama/${drama.id}`)}
             />
           ))}
         </div>
