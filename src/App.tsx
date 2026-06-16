@@ -17,6 +17,15 @@ const ProfilePage = lazy(() =>
 const DramaDetailPage = lazy(() =>
   import('@/features/drama/DramaDetailPage').then((m) => ({ default: m.DramaDetailPage }))
 )
+const TermsPage = lazy(() =>
+  import('@/features/profile/TermsPage').then((m) => ({ default: m.TermsPage }))
+)
+const PrivacyPage = lazy(() =>
+  import('@/features/profile/PrivacyPage').then((m) => ({ default: m.PrivacyPage }))
+)
+const SearchPage = lazy(() =>
+  import('@/features/search/SearchPage').then((m) => ({ default: m.SearchPage }))
+)
 
 export default function App() {
   return (
@@ -34,6 +43,9 @@ export default function App() {
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/drama/:id" element={<DramaDetailPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/search" element={<SearchPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

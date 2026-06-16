@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { SearchBar } from '@/components/ui/SearchBar'
 import { HeroBanner } from './HeroBanner'
@@ -7,8 +8,10 @@ import { AllDramas } from './AllDramas'
 import { useMoviesData } from '@/hooks/useMoviesData'
 
 export function HomePage() {
+  const navigate = useNavigate()
+
   const handleSearchFocus = () => {
-    // Navigate to search page (future implementation)
+    navigate('/search')
   }
 
   const {
