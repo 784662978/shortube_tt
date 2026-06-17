@@ -4,6 +4,11 @@ import MD5 from 'crypto-js/md5'
 const API_KEY = 'D8A4A2624D3CED206DFDBA019A53DB72'
 const SECRET = 'B1DB31F046AEEBC14049037C268A9FFD'
 
+// 根据环境选择 baseURL：本地开发走 Vite proxy，线上直接请求真实域名
+const BASE_URL = import.meta.env.PROD
+  ? 'https://api.aipopshort.com'
+  : '/movies-api'
+
 /**
  * 生成请求签名
  * 规则：将请求接口的所有参数用 '&' 拼接，末尾拼接 '&secret=xxx'，最后 MD5 加密
@@ -24,7 +29,7 @@ function generateSign(params: Record<string, string | number>): string {
  * 自动注入 X-Api-Key 和 sign 请求头
  */
 const moviesApiClient = axios.create({
-  baseURL: '/movies-api',
+  baseURL: BASE_URL,
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
@@ -47,7 +52,19 @@ moviesApiClient.interceptors.request.use(
 moviesApiClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    const message = error.response?.data?.msg || error.response?.data?.message || 'Request failed'
+    // 线上环境输出详细错误日志，便于排查根因
+    if (import.meta.env.PROD) {
+      console.error('[MoviesAPI Error]', {
+        url: error.config?.url,
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+      })
+    }
+    const message =
+      error.response?.data?.msg ||
+      error.response?.data?.message ||
+      `Request failed (${error.response?.status || 'network error'})`
     return Promise.reject(new Error(message))
   }
 )
