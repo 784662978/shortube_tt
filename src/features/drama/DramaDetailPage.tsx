@@ -182,7 +182,6 @@ function DetailContent({ drama, onBack }: DetailContentProps) {
             src={currentPlayUrl}
             className="absolute inset-0 w-full h-full object-cover"
             playsInline
-            muted
             loop
             preload="metadata"
           />

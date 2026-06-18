@@ -147,7 +147,6 @@ export function ForYouVideoSlide({ drama, isActive, onViewDetail }: ForYouVideoS
           className="w-full h-full object-cover"
           loop
           playsInline
-          muted
           preload="metadata"
         />
       ) : (
